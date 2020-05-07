@@ -17,7 +17,7 @@ def plotyearly(xarray,std_xarray, main_xarray, std_main_xarray, Yax, xranges,  p
 #def plotyearly(mean_ucint, std_ucint, Y, date_label, 'Uccle-MLS (mPa)','P Air (hPa)','Dif_Uccle-MLS_UcIntLinPerYear'):
     
     fig,ax0 = plt.subplots()
-    plt.ylim(250,3)
+    # plt.ylim(250,3)
     plt.xlim(xranges)
     plt.xlabel(xtitle)
     plt.ylabel(ytitle)
@@ -28,7 +28,8 @@ def plotyearly(xarray,std_xarray, main_xarray, std_main_xarray, Yax, xranges,  p
     ax0.yaxis.set_minor_locator(AutoMinorLocator(10))
     ax0.xaxis.set_minor_locator(AutoMinorLocator(10))
     ax0.set_yscale('log')
-    ax0.axvline(x=0, color='grey', linestyle='--')
+
+
 
     colorw = 'blue' #winter
     colorsp = 'green' #spring
@@ -40,15 +41,28 @@ def plotyearly(xarray,std_xarray, main_xarray, std_main_xarray, Yax, xranges,  p
     ax0.errorbar(xarray[2], Yax, xerr = std_xarray[2], color = colorsu, label = plotlabel[2],  marker = "^",  linewidth = 0.5, elinewidth = 0.5, capsize = 4, capthick=1.0)
     ax0.errorbar(xarray[3], Yax, xerr = std_xarray[3], color = colora, label = plotlabel[3],  marker = "<",  linewidth = 0.5, elinewidth = 0.5, capsize = 4, capthick=1.0)
 
+
+
     ax0.set_yticks([200,160, 120, 100, 80, 70, 60, 50, 40, 30,20, 10,5])
+
+
+    plt.ylim(250, 4)
+
     ax0.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
     ax0.errorbar(main_xarray, Yax, xerr = std_main_xarray, label = 'All',  marker = "x", color = 'black', linewidth = 2, elinewidth = 0.5, capsize = 4, capthick=1.0)
+
+    std_p5 = [i + 5 for i in main_xarray]
+    std_m5 = [i - 5 for i in main_xarray]
+
+    ax0.axvline(x=0, color='grey', linestyle='--')
+    # ax0.axvspan(-5, 5, alpha=0.2, color='grey')
+    ax0.fill_betweenx(Yax, std_m5, std_p5, alpha=0.2, facecolor='k')
 
     ax0.legend(loc='upper right', frameon=True)
     ##, fontsize = 'small')
     #
-    plt.savefig('/home/poyraden/AURA_MLS/Plots/Season/PerSeason_' + plotname +'.pdf')
-    plt.savefig('/home/poyraden/AURA_MLS/Plots/Season/PerSeason_' + plotname +'.eps')
+    plt.savefig('/home/poyraden/Analysis/AURA_MLS/Plots/Season_0605/PerSeason_' + plotname +'v2.pdf')
+    plt.savefig('/home/poyraden/Analysis/AURA_MLS/Plots/Season_0605/PerSeason_' + plotname +'v2.eps')
     #
 
     #plt.show()
@@ -96,16 +110,16 @@ def plotmeanyearlyOpOne(Xax, Yax, Yxerr, PreLabel, Plotname,inds,ylimit ):
     # axY4.legend(loc='upper right', frameon=True)
     # axY5.legend(loc='upper right', frameon=True)
     
-    plt.savefig('/home/poyraden/AURA_MLS/Plots/Season/PerSeason_' + Plotname +'.pdf')
-    plt.savefig('/home/poyraden/AURA_MLS/Plots/Season/PerSeason_' + Plotname +'.eps')
+    plt.savefig('/home/poyraden/Analysis/AURA_MLS/Plots/Season_0605/PerSeason_' + Plotname +'.pdf')
+    plt.savefig('/home/poyraden/Analysis/AURA_MLS/Plots/Season_0605/PerSeason_' + Plotname +'.eps')
    # plt.show()
 
     
-df = pd.read_csv("/home/poyraden/AURA_MLS/MLS_UccleInterpolated_2004-2018_Dif_final.csv")
+df = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/MLS_UccleInterpolated_2004-2018_Dif_final_DC.csv")
 
 
-# df = pd.read_csv("/home/poyraden/AURA_MLS/CSV_Files/MLS_UccleInterpolated_2004-2018_Dif_meanfixed.csv")
-#df = pd.read_csv("/home/poyraden/AURA_MLS/Codes_debug/MLS_UccleInterpolated_2004-2018_Dif.csv")
+# df = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/CSV_Files/MLS_UccleInterpolated_2004-2018_Dif_meanfixed.csv")
+#df = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/Codes_debug/MLS_UccleInterpolated_2004-2018_Dif.csv")
 
 df = df[df.PreLevel < 260]
 df = df.reset_index()
@@ -144,6 +158,11 @@ dfd[0] =  df[(df.Day >= daywinter) | (df.Day < dayspring)]
 dfd[1] = df[(df.Day >= dayspring) & (df.Day < daysummer)]
 dfd[2] = df[(df.Day >= daysummer) & (df.Day < dayautumn)]
 dfd[3] =  df[(df.Day >= dayautumn) & (df.Day < daywinter)]
+
+dfd[0] = dfd[0].reset_index()
+dfd[1] = dfd[1].reset_index()
+dfd[2] = dfd[2].reset_index()
+dfd[3] = dfd[3].reset_index()
 
 seasonsize = 4
 presize = 20
@@ -212,32 +231,32 @@ for di in range(seasonsize):
         for i in range(0,len(dfd[di]),presize):
             #print(di,j,i)
 
-            dif_ucmean[di][j].append(dfd[di].iloc[i+j]['Dif_UcMean'])
-            dif_ucmedian[di][j].append(dfd[di].iloc[i+j]['Dif_UcMedian'])
-            dif_ucint[di][j].append(dfd[di].iloc[i+j]['Dif_UcIntLin'])
+            dif_ucmean[di][j].append(dfd[di].at[i+j,'Dif_UcMean'])
+            dif_ucmedian[di][j].append(dfd[di].at[i+j,'Dif_UcMedian'])
+            dif_ucint[di][j].append(dfd[di].at[i+j,'Dif_UcIntLin'])
 
-            dif_ucmean2[di][j].append(dfd[di].iloc[i+j]['Dif_UcMean2'])
-            dif_ucmedian2[di][j].append(dfd[di].iloc[i+j]['Dif_UcMedian2'])
-            dif_ucint2[di][j].append(dfd[di].iloc[i+j]['Dif_UcIntLin2'])
+            dif_ucmean2[di][j].append(dfd[di].at[i+j,'Dif_UcMean2'])
+            dif_ucmedian2[di][j].append(dfd[di].at[i+j,'Dif_UcMedian2'])
+            dif_ucint2[di][j].append(dfd[di].at[i+j,'Dif_UcIntLin2'])
             
-            rdif_ucmean[di][j].append(dfd[di].iloc[i+j]['RDif_UcMean'])
-            rdif_ucmedian[di][j].append(dfd[di].iloc[i+j]['RDif_UcMedian'])
-            rdif_ucint[di][j].append(dfd[di].iloc[i+j]['RDif_UcIntLin'])
+            rdif_ucmean[di][j].append(dfd[di].at[i+j,'RDif_UcMean'])
+            rdif_ucmedian[di][j].append(dfd[di].at[i+j,'RDif_UcMedian'])
+            rdif_ucint[di][j].append(dfd[di].at[i+j,'RDif_UcIntLin'])
 
-            rdif2_ucmean[di][j].append(dfd[di].iloc[i+j]['RDif_UcMean2'])
-            rdif2_ucmedian[di][j].append(dfd[di].iloc[i+j]['RDif_UcMedian2'])
-            rdif2_ucint[di][j].append(dfd[di].iloc[i+j]['RDif_UcIntLin2'])
+            rdif2_ucmean[di][j].append(dfd[di].at[i+j,'RDif_UcMean2'])
+            rdif2_ucmedian[di][j].append(dfd[di].at[i+j,'RDif_UcMedian2'])
+            rdif2_ucint[di][j].append(dfd[di].at[i+j,'RDif_UcIntLin2'])
 
-            main_dif_ucmean[j].append(dfd[di].iloc[i+j]['Dif_UcMean'])
-            main_dif_ucmean2[j].append(dfd[di].iloc[i+j]['Dif_UcMean2'])
-            main_rdif_ucmean[j].append(dfd[di].iloc[i+j]['RDif_UcMean'])
-            main_rdif2_ucmean[j].append(dfd[di].iloc[i+j]['RDif_UcMean2'])
+            main_dif_ucmean[j].append(dfd[di].at[i+j,'Dif_UcMean'])
+            main_dif_ucmean2[j].append(dfd[di].at[i+j,'Dif_UcMean2'])
+            main_rdif_ucmean[j].append(dfd[di].at[i+j,'RDif_UcMean'])
+            main_rdif2_ucmean[j].append(dfd[di].at[i+j,'RDif_UcMean2'])
 
 
-            main_dif_ucint[j].append(dfd[di].iloc[i+j]['Dif_UcIntLin'])
-            main_dif_ucint2[j].append(dfd[di].iloc[i+j]['Dif_UcIntLin2'])
-            main_rdif_ucint[j].append(dfd[di].iloc[i+j]['RDif_UcIntLin'])
-            main_rdif2_ucint[j].append(dfd[di].iloc[i+j]['RDif_UcIntLin2'])
+            main_dif_ucint[j].append(dfd[di].at[i+j,'Dif_UcIntLin'])
+            main_dif_ucint2[j].append(dfd[di].at[i+j,'Dif_UcIntLin2'])
+            main_rdif_ucint[j].append(dfd[di].at[i+j,'RDif_UcIntLin'])
+            main_rdif2_ucint[j].append(dfd[di].at[i+j,'RDif_UcIntLin2'])
 
 
 print('end of first filling')
@@ -335,7 +354,7 @@ plotyearly(mean_r2ucint, std_r2ucint, main_mean_r2ucint, main_std_r2ucint,  Y, [
            'MLS-Uccle (%)','P Air (hPa)','RDif_MLS-Uccle_UcIntLin_PerYear')
 plotyearly(mean_r2ucint, std_r2ucint, main_mean_r2ucint, main_std_r2ucint,  Y, [-20,30], date_label,
            'MLS-Uccle (%)','P Air (hPa)','ZoomRDif_MLS-Uccle_UcIntLin_PerYear')
-plotyearly(mean_r2ucint, std_r2ucint, main_mean_r2ucint, main_std_r2ucint,  Y, [-60,80], date_label,
+plotyearly(mean_r2ucint, std_r2ucint, main_mean_r2ucint, main_std_r2ucint,  Y, [-60,60], date_label,
            'MLS-Uccle (%)','P Air (hPa)','2RDif_MLS-Uccle_UcIntLin_PerYear')
 
 

@@ -18,8 +18,8 @@ from scipy.interpolate import interp1d
 
 problem = open("ProblematicFiles.txt", "a")
 
-#file = open("/home/poyraden/AURA_MLS/MatchedDates.txt", "r")
-file = open("/home/poyraden/AURA_MLS/MatchedDates.txt", "r")
+#file = open("/home/poyraden/Analysis/AURA_MLS/MatchedDates.txt", "r")
+file = open("/home/poyraden/Analysis/AURA_MLS/MatchedDates.txt", "r")
 
 
 all_lines = file.readlines()
@@ -29,8 +29,8 @@ for il in all_lines:
     matcheddates.append(tmp)
 print(len(matcheddates))
 
-#fileu = open("/home/poyraden/AURA_MLS/UccleData_2004_2018.txt", "r")
-fileu = open("/home/poyraden/AURA_MLS/UccleData_2004_2018.txt", "r")
+#fileu = open("/home/poyraden/Analysis/AURA_MLS/UccleData_2004_2018.txt", "r")
+fileu = open("/home/poyraden/Analysis/AURA_MLS/UccleData_2004_2018.txt", "r")
 
 test_lines = fileu.readlines()
 
@@ -50,16 +50,16 @@ file_toread = []
 for ib in test_lines:
     for d in common_dates:
         if(ib.find(d) != -1): 
-            #file_toread.append('/home/poyraden/AURA_MLS/UccleData/' + ib)
-            file_toread.append('/home/poyraden/AURA_MLS/UccleData/' + ib)
+            #file_toread.append('/home/poyraden/Analysis/AURA_MLS/UccleData/' + ib)
+            file_toread.append('/home/poyraden/Analysis/AURA_MLS/UccleData/' + ib)
 
 
 columnString = "Time Altitude Pair Tair Humidity TPump PO3 WindDir WindSp AccumO3"
 columnStr = columnString.split(" ")
 
 #mls data frame to read
-dfm = pd.read_csv("/home/poyraden/AURA_MLS/AURA_MLSData_MatchedUccle.csv")
-#dfm = pd.read_csv("/home/poyraden/AURA_MLS/AURA_MLSData_MatchedUccle.csv")
+dfm = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/AURA_MLSData_MatchedUccle.csv")
+#dfm = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/AURA_MLSData_MatchedUccle.csv")
 
 
 list_data = []
@@ -77,7 +77,7 @@ for filename in file_toread:
     header_date = header_tmp[1]
     header_date = datetime.strptime(header_date, '%Y%m%d')
     header_date = header_date.strftime('%Y%m%d')
-    
+
     header_time = header_tmp[2]
     header_time = datetime.strptime(header_time, '%H:%M')
     header_time = header_time.strftime('%H:%M:%S')
@@ -115,6 +115,10 @@ for filename in file_toread:
     descent_list = dfn.index[dfn['Descent'] == True].tolist()
     # ascent df
     dfa = dfn.drop(descent_list)
+
+## for the frzoen solutions
+    dfa = dfa.drop(dfa[ (dfa.PO3 <= 2) & (dfa.Pair <= 10) ].index)
+
     
     # skimming for the mls data
     dfas = dfa[(dfa.Pair >=3) & (dfa.Pair <= 400 )]
@@ -353,11 +357,10 @@ for filename in file_toread:
 df = pd.concat(list_data,ignore_index=True)
 dfall = pd.concat(listall_data,ignore_index=True)
 
-#df.to_csv("/home/poyraden/AURA_MLS/Ucclematched_2004_2018_meanfixed.csv")
-#dfall.to_csv("/home/poyraden/AURA_MLS/MLS_UccleInterpolated_2004-2018_meanfixed.csv")
 
-df.to_csv("/home/poyraden/AURA_MLS/Ucclematched_2004_2018_db.csv")
-dfall.to_csv("/home/poyraden/AURA_MLS/MLS_UccleInterpolated_2004-2018_final.csv")
+
+df.to_csv("/home/poyraden/Analysis/AURA_MLS/Ucclematched_2004_2018_db_DC.csv")
+dfall.to_csv("/home/poyraden/Analysis/AURA_MLS/MLS_UccleInterpolated_2004-2018_final_DC.csv")
 
 print('write dif')
 
@@ -380,6 +383,5 @@ dfcp['RDif_UcMean2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_U
 dfcp['RDif_UcMedian2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcMedian)) / np.asarray(dfall.PO3_UcMedian)
 dfcp['RDif_UcIntLin2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcIntLin)) / np.asarray(dfall.PO3_UcIntLin)
 
-#dfcp.to_csv("/home/poyraden/AURA_MLS/Codes_original/MLS_UccleInterpolated_2004-2018_Dif.csv")
-dfcp.to_csv("/home/poyraden/AURA_MLS/MLS_UccleInterpolated_2004-2018_Dif_final.csv")
+dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/MLS_UccleInterpolated_2004-2018_Dif_final_DC.csv")
 

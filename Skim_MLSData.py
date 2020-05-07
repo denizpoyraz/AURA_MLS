@@ -10,8 +10,8 @@ from datetime import datetime
 # Second code of the MLS analysis
 #get the mls dates from df and write to matched uccle mls dates, MLSUccle_MatchedDates.txt
 
-#df = pd.read_pickle("/home/poyraden/AURA_MLS/AURA_MLS_Data.pkl")
-df = pd.read_csv("/home/poyraden/AURA_MLS/AURA_MLS_Data.csv")
+#df = pd.read_pickle("/home/poyraden/Analysis/AURA_MLS/AURA_MLS_Data.pkl")
+df = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/AURA_MLS_Data.csv")
 
 
 dfd = df.drop_duplicates(['Date'])
@@ -20,7 +20,7 @@ dfd['Date'] = dfd['Date'].dt.strftime('%Y%m%d')
 mls_dates = dfd['Date'].tolist()
 
 # get the uccle data dates, first skim it to years 2004-2019 
-filet = open("/home/poyraden/AURA_MLS/UccleDates.txt", "r")
+filet = open("/home/poyraden/Analysis/AURA_MLS/UccleDates.txt", "r")
 
 test_lines = filet.readlines()
 sizetxt = len(test_lines)
@@ -113,8 +113,8 @@ for im in range (len(match)):
 
 dffinal = pd.concat(list_data,ignore_index=True)
 
-dffinal.to_csv("/home/poyraden/AURA_MLS/AURA_MLSData_MatchedUccle.csv")
-#dffinal.to_pickle("/home/poyraden/AURA_MLS/AURA_MLS_Data_MatchUccle.pkl")
+dffinal.to_csv("/home/poyraden/Analysis/AURA_MLS/AURA_MLSData_MatchedUccle.csv")
+#dffinal.to_pickle("/home/poyraden/Analysis/AURA_MLS/AURA_MLS_Data_MatchUccle.pkl")
 
 # dffinal.to_csv("/Volumes/HD3/KMI/AURA_MLS/AURA_MLS_Data_SkimmedUccle.csv")
 # dffinal.to_pickle("/Volumes/HD3/KMI/AURA_MLS/AURA_MLS_Data_SkimmedUccle.pkl")

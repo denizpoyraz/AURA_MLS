@@ -13,7 +13,7 @@ from datetime import datetime
 
 
 
-file = open("/home/poyraden/AURA_MLS/aura_mls_l2gpovp_o3_v04_uccle.txt", "r")
+file = open("/home/poyraden/Analysis/AURA_MLS/aura_mls_l2gpovp_o3_v04_uccle.txt", "r")
 #file = open("/Volumes/HD3/KMI/AURA_MLS/aura_mls_l2gpovp_o3_v04_uccle.txt", "r")
 
 
@@ -55,6 +55,6 @@ df['Time'] = [time.time() for time in df['Time']]
 df['DifLat'] = abs(50.80 - df['Lat'])
 df['DifLon'] = abs(4.350 - df['Lon'])
 
-df.to_csv("/home/poyraden/AURA_MLS/AURA_MLS_Data.csv")
+df.to_csv("/home/poyraden/Analysis/AURA_MLS/AURA_MLS_Data.csv")
 
 
