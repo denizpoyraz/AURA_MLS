@@ -42,19 +42,20 @@ for i in range(55):
     df[Pressurestr[i]] = df[Pressurestr[i]] * RefPres[i] * 100000
     df[PressurePrestr[i]] = df[PressurePrestr[i]] * RefPres[i] * 100000
 
-df.tmp = df.Datetime.str.split("T", n = 1, expand = True)
-df['Date'] = df.tmp[0]
+# df.tmp = df.Datetime.str.split("T", n = 1, expand = True)
+df['Date'] = df.Datetime.str.split("T", n = 1, expand = True)[0]
 df['Date'] = pd.to_datetime(df['Date'], format='%Y%m%d')
 df['Date'] = df['Date'].dt.strftime('%Y%m%d')
 
 
 df['timetmp'] = pd.to_timedelta(df["sec"], unit='s')
+df['timetmp'] = df['timetmp'].astype('timedelta64[s]')
 df['Time'] = pd.to_datetime(df['timetmp'])
 df['Time'] = [time.time() for time in df['Time']]
 
 df['DifLat'] = abs(50.80 - df['Lat'])
 df['DifLon'] = abs(4.350 - df['Lon'])
 
-df.to_csv("/home/poyraden/Analysis/AURA_MLS/AURA_MLS_Data.csv")
+df.to_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLS_Data.csv")
 
 
