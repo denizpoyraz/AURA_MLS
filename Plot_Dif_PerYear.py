@@ -72,8 +72,8 @@ def plotyearly(xarray,std_xarray,main_xarray,std_main_xarray,Yax,xranges,plotlab
     # ax0.axvspan(-5, 5, alpha=0.2, color='grey')
 
     #    #
-    plt.savefig('/home/poyraden/Analysis/AURA_MLS/Plots/Plots_2507/' + plotname + 'v1.pdf')
-    plt.savefig('/home/poyraden/Analysis/AURA_MLS/Plots/Plots_2507/' + plotname + 'v1.eps')
+    plt.savefig('/home/poyraden/Analysis/AURA_MLS/Plots/Plots_test/' + plotname + 'v1.pdf')
+    plt.savefig('/home/poyraden/Analysis/AURA_MLS/Plots/Plots_test/' + plotname + 'v1.eps')
     #
     # plt.savefig('/home/poyraden/Analysis/AURA_MLS/Plots/Plots_timenight/Dif_UcIntLinPerYear.pdf')
     # plt.savefig('/home/poyraden/Analysis/AURA_MLS/Plots/Plots/Plots_timenight/Dif_UcIntLinPerYear.eps')
@@ -83,8 +83,8 @@ def plotyearly(xarray,std_xarray,main_xarray,std_main_xarray,Yax,xranges,plotlab
 #######################################################################################################################
 # #######################################
 
-df=pd.read_csv("/home/poyraden/Analysis/AURA_MLS/MLS_UccleInterpolated_2004-2018_Dif_final_DC.csv")
-# df = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/Codes/MLS_UccleInterpolated_2004-2018_Dif.csv")
+# df=pd.read_csv("/home/poyraden/Analysis/AURA_MLS/MLS_UccleInterpolated_2004-2018_Dif_final_DC.csv")
+df=pd.read_csv("/home/poyraden/Analysis/AURA_MLS/MLS_UccleInterpolated_2004-2018_Dif_test.csv")
 
 # df = df[df.PreLevel < 217]
 df=df[df.PreLevel <= 260]

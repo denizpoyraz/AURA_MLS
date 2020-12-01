@@ -110,11 +110,20 @@ for filename in file_toread:
 
     # now downsample the uccle data 
    # now downsample the uccle data 
-    dfn  = df[df.Altitude > 0 ]
-    dfn['Descent'] = dfn.Altitude < dfn.Altitude.shift(2)
-    descent_list = dfn.index[dfn['Descent'] == True].tolist()
-    # ascent df
+   #  dfn  = df[df.Altitude > 0 ]
+   #  dfn['Descent'] = dfn.Altitude < dfn.Altitude.shift(2)
+   #  descent_list = dfn.index[dfn['Descent'] == True].tolist()
+   #  # ascent df
+   #  dfa = dfn.drop(descent_list)
+
+### another method for this 08/06/2020
+    dfn = df[df.Altitude > 0]
+    maxh = dfn.Altitude.max()
+    index = dfn[dfn["Altitude"] == maxh].index[0]
+
+    descent_list = dfn[dfn.index > index].index.tolist()
     dfa = dfn.drop(descent_list)
+
 
 ## for the frzoen solutions
     dfa = dfa.drop(dfa[ (dfa.PO3 <= 2) & (dfa.Pair <= 10) ].index)
@@ -203,7 +212,7 @@ for filename in file_toread:
     xuccle = np.array(xuccle)
     yuccle = np.array(yuccle)
     if( (len(xuccle) < 15) | (len(xuccle) ==0)):
-        print('Problem here ? ', header_date)
+        # print('Problem here ? ', header_date)/
         problem.write(header_date + '\n')
         continue
     
@@ -359,9 +368,10 @@ dfall = pd.concat(listall_data,ignore_index=True)
 
 
 
-df.to_csv("/home/poyraden/Analysis/AURA_MLS/Ucclematched_2004_2018_db_DC.csv")
-dfall.to_csv("/home/poyraden/Analysis/AURA_MLS/MLS_UccleInterpolated_2004-2018_final_DC.csv")
-
+# df.to_csv("/home/poyraden/Analysis/AURA_MLS/Ucclematched_2004_2018_db_DC.csv")
+# dfall.to_csv("/home/poyraden/Analysis/AURA_MLS/MLS_UccleInterpolated_2004-2018_final_DC.csv")
+df.to_csv("/home/poyraden/Analysis/AURA_MLS/Ucclematched_2004_2018_test.csv")
+dfall.to_csv("/home/poyraden/Analysis/AURA_MLS/MLS_UccleInterpolated_2004-2018_test.csv")
 print('write dif')
 
 dfcp = dfall.copy() 
@@ -383,5 +393,6 @@ dfcp['RDif_UcMean2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_U
 dfcp['RDif_UcMedian2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcMedian)) / np.asarray(dfall.PO3_UcMedian)
 dfcp['RDif_UcIntLin2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcIntLin)) / np.asarray(dfall.PO3_UcIntLin)
 
-dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/MLS_UccleInterpolated_2004-2018_Dif_final_DC.csv")
+# dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/MLS_UccleInterpolated_2004-2018_Dif_final_DC.csv")
+dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/MLS_UccleInterpolated_2004-2018_Dif_test.csv")
 
