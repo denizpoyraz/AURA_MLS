@@ -38,6 +38,7 @@ for y in range(2004,2020):
 
 for l in range(sizetxt):
     d1[l] = test_lines[l].split(".")[0]
+    # dates[l] = d1[l].split("uc")[0]
     dates[l] = d1[l].split("_")[0]
     # dates[l] = '20'+dates[l]  if ( (dates[l].startswith('0')) | (dates[l].startswith('1'))) else '19'+dates[l]
     for iy in range(0,16):
