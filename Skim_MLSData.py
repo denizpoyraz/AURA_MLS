@@ -11,7 +11,7 @@ from datetime import datetime
 #get the mls dates from df and write to matched uccle mls dates, MLSUccle_MatchedDates.txt
 
 #df = pd.read_pickle("/home/poyraden/Analysis/AURA_MLS/AURA_MLS_Data.csv")
-df = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLS_Data.csv")
+df = pd.read_hdf("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLS_Data.hdf")
 
 
 dfd = df.drop_duplicates(['Date'])
@@ -21,7 +21,7 @@ mls_dates = dfd['Date'].tolist()
 
 # get the uccle data dates, first skim it to years 2004-2019 
 # filet = open("/home/poyraden/Analysis/AURA_MLS/UccleDates.txt", "r")
-filet = open("/home/poyraden//Analysis/Homogenization_Analysis/Files/Uccle/UccleDates_0419.txt", "r")
+filet = open("/home/poyraden/Analysis/Homogenization_Analysis/Files/Uccle/DQA/Uccle_DQA_dates.txt", "r")
 
 test_lines = filet.readlines()
 sizetxt = len(test_lines)
@@ -38,10 +38,12 @@ for y in range(2004,2020):
 
 for l in range(sizetxt):
     d1[l] = test_lines[l].split(".")[0]
-    # dates[l] = d1[l].split("uc")[0]
+    # dates[l] = d1[l].split("uc")[1]
     dates[l] = d1[l].split("_")[0]
     # dates[l] = '20'+dates[l]  if ( (dates[l].startswith('0')) | (dates[l].startswith('1'))) else '19'+dates[l]
     for iy in range(0,16):
+        # print(dates[l], years_mls[iy])
+
         if(dates[l].startswith(years_mls[iy])): yearsmatch.append(dates[l])
 
 print('len years match', len(yearsmatch))
@@ -65,7 +67,7 @@ df['Match'] = df["Date"].isin(match)
 
 match_list = df.index[df['Match'] == True].tolist()
 
-with open('MLSUccle_MatchedDates.txt', 'w') as f:
+with open('MLSUccle_MatchedDatesDQA.txt', 'w') as f:
     for item in match:
         f.write("%s\n" % item)
 
@@ -76,8 +78,9 @@ newdf = df.loc[match_list]
 newdf['Date'] = pd.to_datetime(newdf['Date'], format='%Y%m%d')
 newdf['Date'] = newdf['Date'].dt.strftime('%Y%m%d')
 
-newdf['Time'] = pd.to_datetime(newdf['Time'])
+newdf['Time'] = pd.to_datetime(newdf['Time'] + pd.Timestamp(0))
 newdf['Time'] = [time.time() for time in newdf['Time']]
+
 
 distance_list_night = []
 distance_list_noon = []
@@ -116,8 +119,8 @@ for im in range (len(match)):
 dffinal = pd.concat(list_data,ignore_index=True)
 
 #this is the MLS data to be used to analyze
-dffinal.to_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccle.csv")
-dffinal.to_hdf('/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccle.h5', key='df', mode='w')
+dffinal.to_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccleDQA.csv")
+dffinal.to_hdf('/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccleDQA.h5', key='df', mode='w')
 
 
 

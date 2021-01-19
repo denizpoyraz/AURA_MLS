@@ -1,11 +1,12 @@
 import pandas as pd
+from datetime import time
+from datetime import datetime
 import numpy as np
 import re
 import glob
 import math
 from math import log
-from datetime import time
-from datetime import datetime
+
 
 
 #First Code of MLS analysis
@@ -48,14 +49,22 @@ df['Date'] = pd.to_datetime(df['Date'], format='%Y%m%d')
 df['Date'] = df['Date'].dt.strftime('%Y%m%d')
 
 
-df['timetmp'] = pd.to_timedelta(df["sec"], unit='s')
-df['timetmp'] = df['timetmp'].astype('timedelta64[s]')
-df['Time'] = pd.to_datetime(df['timetmp'])
-df['Time'] = [time.time() for time in df['Time']]
+df['timetmp1'] = pd.to_timedelta(df["sec"], unit='s')
+df['timetmp2'] = df['timetmp1'].astype('timedelta64[s]')
+df['Time1'] = pd.to_datetime(df['timetmp2'])
+df['Time2'] = [x.time() for x in df['Time1']]
+
+# df['Time'] = pd.to_timedelta(df["sec"], unit='s')
+# df['Time'] = [time.time() for time in df['Time']]
+
 
 df['DifLat'] = abs(50.80 - df['Lat'])
 df['DifLon'] = abs(4.350 - df['Lon'])
 
+df['Time'] = pd.to_timedelta(df["sec"], unit='s')
+
+
+df.to_hdf("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLS_Data.hdf", key='df')
 df.to_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLS_Data.csv")
 
 
