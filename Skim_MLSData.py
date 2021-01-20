@@ -22,7 +22,8 @@ mls_dates = dfd['Date'].tolist()
 # get the uccle data dates, first skim it to years 2004-2019 
 # filet = open("/home/poyraden/Analysis/AURA_MLS/UccleDates.txt", "r")
 filet = open("/home/poyraden/Analysis/Homogenization_Analysis/Files/Uccle/DQA/Uccle_DQA_dates.txt", "r")
-
+# filet = open("/home/poyraden/Analysis/Homogenization_Analysis/Files/Nilu/Uccle/DQA/Uccle_NiluDQA_dates.txt", "r")
+#
 test_lines = filet.readlines()
 sizetxt = len(test_lines)
 d1 = ['']*sizetxt
@@ -68,6 +69,8 @@ df['Match'] = df["Date"].isin(match)
 match_list = df.index[df['Match'] == True].tolist()
 
 with open('MLSUccle_MatchedDatesDQA.txt', 'w') as f:
+# with open('MLSUccle_MatchedDatesNiluDQA.txt', 'w') as f:
+
     for item in match:
         f.write("%s\n" % item)
 
@@ -119,9 +122,11 @@ for im in range (len(match)):
 dffinal = pd.concat(list_data,ignore_index=True)
 
 #this is the MLS data to be used to analyze
-dffinal.to_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccleDQA.csv")
-dffinal.to_hdf('/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccleDQA.h5', key='df', mode='w')
+# dffinal.to_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccleDQA.csv")
+# dffinal.to_hdf('/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccleDQA.h5', key='df', mode='w')
 
+# dffinal.to_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccleNiluDQA.csv")
+# dffinal.to_hdf('/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccleNiluDQA.h5', key='df', mode='w')
 
 
 

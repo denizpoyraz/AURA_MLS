@@ -15,11 +15,15 @@ from scipy.interpolate import interp1d
 
 problem = open("DQA_ProblematicFiles.txt", "a")
 
-file = open("/home/poyraden/Analysis/AURA_MLS/Codes/MLSUccle_MatchedDates.txt", "r")
+
+# file = open("/home/poyraden/Analysis/AURA_MLS/Codes/MLSUccle_MatchedDatesNiluDQA.txt", "r")
+file = open("/home/poyraden/Analysis/AURA_MLS/Codes/MLSUccle_MatchedDatesDQA.txt", "r")
+# file = open("/home/poyraden/Analysis/AURA_MLS/Codes/MLSUccle_MatchedDates.txt", "r")
 # file = open("/home/poyraden/Analysis/AURA_MLS/MatchedDates.txt", "r")
 
-pathucclefiles = '/home/poyraden/Analysis/Homogenization_Analysis/Files/Uccle/DQA/Corrected/'
-# pathucclefiles = '/home/poyraden/Analysis/Homogenization_Analysis/Files/Uccle/DQA/All/'
+# pathucclefiles = '/home/poyraden/Analysis/Homogenization_Analysis/Files/Nilu/Uccle/DQA/Corrected/'
+# pathucclefiles = '/home/poyraden/Analysis/Homogenization_Analysis/Files/Uccle/DQA/Corrected/'
+pathucclefiles = '/home/poyraden/Analysis/Homogenization_Analysis/Files/Uccle/DQA/All/'
 
 
 all_lines = file.readlines()
@@ -27,14 +31,18 @@ matcheddates = []
 
 for il in all_lines:
     tmp = il.split("\n")[0]
-    tmp = pathucclefiles + tmp + '_dqa.csv'
-    # tmp = pathucclefiles + tmp + '_all.csv'
+    # tmp = pathucclefiles + tmp + '_dqa.csv'
+    tmp = pathucclefiles + tmp + '_all.csv'
 
     matcheddates.append(tmp)
 print(matcheddates[0:10], len(matcheddates))
 
 # mls data frame to read
-dfm = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccle.csv")
+# dfm = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccle.csv")
+dfm = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccleDQA.csv")
+# dfm = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccleNiluDQA.csv")
+
+
 
 list_data = []
 listall_data = []
@@ -43,8 +51,9 @@ listall_data = []
 
 for filename in matcheddates:
     # for filename in file_test:
-
+    print(filename)
     df = pd.read_csv(filename)
+    # print("uccle df", list(df))
 
     # df = df.drop(['Unnamed: 0', 'dI'], axis=1)
     # df = df.drop(['Unnamed: 0', 'Tpump', 'unc_Tpump', 'Phip', 'unc_Phip', 'Eta', 'dPhip_meas', 'Phip_ground', 'unc_phix',
@@ -201,16 +210,20 @@ for filename in matcheddates:
     ib = 6
 
     dl = dfm.index[dfm.Date == int(header_date)].tolist()
+    # print(dl)
     # mlsdate =
     mlspo3 = list(dfm.loc[dl[0], st[ib:im]])
     tim = dfm.loc[dl[0], 'Time']
     mlstime = [tim] * len(ymain)
+    print('one',tim)
     # print(header_date,'and', mlstime)
     dis = dfm.loc[dl[0], 'Dis']
     mlsdis = [dis] * len(ymain)
     if (len(dl) == 2):
         mlspo3_two = list(dfm.loc[dl[1], st[ib:im]])
         tim2 = dfm.loc[dl[1], 'Time']
+        print('two', tim2)
+
         mlstime_two = [tim2] * len(ymain)
         dis2 = dfm.loc[dl[1], 'Dis']
         mlsdis_two = [dis2] * len(ymain)
@@ -302,5 +315,7 @@ dfcp['RDif_UcMean2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_U
 dfcp['RDif_UcMedian2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcMedian)) / np.asarray(dfall.PO3_UcMedian)
 dfcp['RDif_UcIntLin2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcIntLin)) / np.asarray(dfall.PO3_UcIntLin)
 
-dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_UccleInterpolated_2004-2019_DQA.csv")
-# dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_UccleInterpolated_2004-2019_raw.csv")
+
+# dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_UccleInterpolated_2004-2019_NiluDQA.csv")
+# dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_UccleInterpolated_2004-2019_DQA.csv")
+dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_UccleInterpolated_2004-2019_raw.csv")
