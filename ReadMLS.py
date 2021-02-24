@@ -12,10 +12,9 @@ from math import log
 #First Code of MLS analysis
 # read the MLS data and write it to a csv file
 
+fname = 'aura_mls_l2gpovp_o3_v04_sodankyla.txt'
 
-
-file = open("/home/poyraden/Analysis/AURA_MLS/aura_mls_l2gpovp_o3_v04_uccle.txt", "r")
-#file = open("/Volumes/HD3/KMI/AURA_MLS/aura_mls_l2gpovp_o3_v04_uccle.txt", "r")
+file = open("/home/poyraden/Analysis/AURA_MLS/mls_data/" + fname, "r")
 
 
 file.readline()
@@ -63,8 +62,8 @@ df['DifLon'] = abs(4.350 - df['Lon'])
 
 df['Time'] = pd.to_timedelta(df["sec"], unit='s')
 
-
-df.to_hdf("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLS_Data.hdf", key='df')
-df.to_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLS_Data.csv")
+fout = 'Sodankyla'
+df.to_hdf("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLS_Data" + fout + ".hdf", key='df')
+df.to_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLS_Data" + fout + ".csv")
 
 

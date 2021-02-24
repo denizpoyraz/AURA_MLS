@@ -10,8 +10,8 @@ from datetime import datetime
 # Second code of the MLS analysis
 #get the mls dates from df and write to matched uccle mls dates, MLSUccle_MatchedDates.txt
 
-#df = pd.read_pickle("/home/poyraden/Analysis/AURA_MLS/AURA_MLS_Data.csv")
-df = pd.read_hdf("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLS_Data.hdf")
+# df = pd.read_hdf("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLS_Data.hdf")
+df = pd.read_hdf("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLS_DataSodankyla.hdf")
 
 
 dfd = df.drop_duplicates(['Date'])
@@ -21,20 +21,24 @@ mls_dates = dfd['Date'].tolist()
 
 # get the uccle data dates, first skim it to years 2004-2019 
 # filet = open("/home/poyraden/Analysis/AURA_MLS/UccleDates.txt", "r")
-filet = open("/home/poyraden/Analysis/Homogenization_Analysis/Files/Uccle/DQA/Uccle_DQA_dates.txt", "r")
+# I do this txt by hand-> ls *csv > name of the file
+# filet = open("/home/poyraden/Analysis/Homogenization_Analysis/Files/Uccle/DQA/Uccle_DQA_dates.txt", "r")
 # filet = open("/home/poyraden/Analysis/Homogenization_Analysis/Files/Nilu/Uccle/DQA/Uccle_NiluDQA_dates.txt", "r")
+# filet =  open("/home/poyraden/Analysis/Homogenization_Analysis/Files/Nilu/Sodankyl/DQA/Sodankyl_DQA_dates.txt","r")
 #
+filet =  open("/home/poyraden/Analysis/Homogenization_Analysis/Files/Nilu/Sodankyl/DQA/Sodankyl_DQA_dates.txt","r")
+
 test_lines = filet.readlines()
 sizetxt = len(test_lines)
 d1 = ['']*sizetxt
 dates = ['']* sizetxt
 
     
-years_mls = [''] * 16
+years_mls = [''] * 17
 yearsmatch = [] 
 
 #mls years 2004-2019
-for y in range(2004,2020):
+for y in range(2004,2021):
     years_mls[y-2004] = str(y)
 
 for l in range(sizetxt):
@@ -42,7 +46,7 @@ for l in range(sizetxt):
     # dates[l] = d1[l].split("uc")[1]
     dates[l] = d1[l].split("_")[0]
     # dates[l] = '20'+dates[l]  if ( (dates[l].startswith('0')) | (dates[l].startswith('1'))) else '19'+dates[l]
-    for iy in range(0,16):
+    for iy in range(0,17):
         # print(dates[l], years_mls[iy])
 
         if(dates[l].startswith(years_mls[iy])): yearsmatch.append(dates[l])
@@ -68,7 +72,8 @@ df['Match'] = df["Date"].isin(match)
 
 match_list = df.index[df['Match'] == True].tolist()
 
-with open('MLSUccle_MatchedDatesDQA.txt', 'w') as f:
+with open('MLSSodankyl_MatchedDatesDQA.txt', 'w') as f:
+# with open('MLSUccle_MatchedDatesDQA.txt', 'w') as f:
 # with open('MLSUccle_MatchedDatesNiluDQA.txt', 'w') as f:
 
     for item in match:
@@ -128,5 +133,7 @@ dffinal = pd.concat(list_data,ignore_index=True)
 # dffinal.to_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccleNiluDQA.csv")
 # dffinal.to_hdf('/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedUccleNiluDQA.h5', key='df', mode='w')
 
+dffinal.to_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedSodankyl_DQA.csv")
+dffinal.to_hdf('/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedSodankyl_DQA.h5', key='df', mode='w')
 
 
