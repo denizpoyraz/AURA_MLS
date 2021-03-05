@@ -21,32 +21,36 @@ matcheddates = []
 
 for il in all_lines:
     tmp = il.split("\n")[0]
-    print(tmp)
+    # print(tmp)
     begin =""
     if int(tmp) <= 20051124: begin = 'SO' + tmp[2:]
     if int(tmp) > 20051124: begin = 'so' + tmp[2:]
-    print(tmp, begin)
+    # print(tmp, begin)
 
     # if int(il) >= "051124" :print(il[2:])
-    tmp = pathfiles + begin + '_rawcurrent.csv'
-    # tmp = pathfiles + tmp + '_dqa.csv'
+    # tmp = pathfiles + tmp + '_bkg-pf-eta-pfground-tpump.h5'
+    tmp = pathfiles + begin + '_rawcurrent.hdf'
+
 
     matcheddates.append(tmp)
+
 print(matcheddates[0:10], len(matcheddates))
 
 # mls data frame to read
 dfm = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/New/AURA_MLSData_MatchedSodankyl_DQA.csv")
 
-list_data = []
+# list_data = []
 listall_data = []
 
 # file_test = matcheddates[300:800]
 
 for filename in matcheddates:
-    print(filename)
-    df = pd.read_csv(filename)
+    # print(filename)
+    df = pd.read_hdf(filename)
+    # df = pd.read_csv(filename)
 
-    list_data.append(df)
+
+    # list_data.append(df)
 
  # now downsample the uccle data remove descent list
     dfn = df[df.Height > 0]
@@ -262,35 +266,39 @@ dfall = pd.concat(listall_data, ignore_index=True)
 #
 #
 # df.to_csv("/home/poyraden/Analysis/AURA_MLS/New/Ucclematched_2004_2019_DQA.csv")
-# dfall.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_Interpolated_2004-2020_DQA.csv")
-dfall.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_Interpolated_2004-2020_Raw.csv")
+dfall.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_Interpolated_raw.csv")
+dfall.to_hdf("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_Interpolated_raw.h5", key = 'df')
+
+# dfall.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_Interpolated_2004-2020_Raw.csv")
 
 # df.to_csv("/home/poyraden/Analysis/AURA_MLS/New/Ucclematched_2004_2019_raw.csv")
 # dfall.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_UccleInterpolated_2004-2019_raw.csv")
 # print('write dif')
 #
-dfcp = dfall.copy()
+# dfcp = dfall.copy()
+#
+# dfcp['Dif_UcMean'] = np.asarray(dfall.PO3_UcMean) - np.asarray(dfall.PO3_MLS)
+# dfcp['Dif_UcMedian'] = np.asarray(dfall.PO3_UcMedian) - np.asarray(dfall.PO3_MLS)
+# dfcp['Dif_UcIntLin'] = np.asarray(dfall.PO3_UcIntLin) - np.asarray(dfall.PO3_MLS)
+#
+# dfcp['RDif_UcMean'] = 100 * (np.asarray(dfall.PO3_UcMean) - np.asarray(dfall.PO3_MLS)) / np.asarray(dfall.PO3_MLS)
+# dfcp['RDif_UcMedian'] = 100 * (np.asarray(dfall.PO3_UcMedian) - np.asarray(dfall.PO3_MLS)) / np.asarray(dfall.PO3_MLS)
+# dfcp['RDif_UcIntLin'] = 100 * (np.asarray(dfall.PO3_UcIntLin) - np.asarray(dfall.PO3_MLS)) / np.asarray(dfall.PO3_MLS)
+#
+# dfcp['Dif_UcMean2'] = np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcMean)
+# dfcp['Dif_UcMedian2'] = np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcMedian)
+# dfcp['Dif_UcIntLin2'] = np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcIntLin)
+#
+# dfcp['RDif_UcMean2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcMean)) / np.asarray(dfall.PO3_UcMean)
+# dfcp['RDif_UcMedian2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcMedian)) / np.asarray(
+#     dfall.PO3_UcMedian)
+# dfcp['RDif_UcIntLin2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcIntLin)) / np.asarray(
+#     dfall.PO3_UcIntLin)
+#
+# # dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_UccleInterpolated_2004-2019_NiluDQA.csv")
+# dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_RDif_Interpolated_2004-2019_DQA_bkg-pf-eta-pfground-tpump.csv")
+# dfcp.to_hdf("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_RDif_Interpolated_2004-2019_DQA_bkg-pf-eta-pfground-tpump.hdf", key = 'df')
 
-dfcp['Dif_UcMean'] = np.asarray(dfall.PO3_UcMean) - np.asarray(dfall.PO3_MLS)
-dfcp['Dif_UcMedian'] = np.asarray(dfall.PO3_UcMedian) - np.asarray(dfall.PO3_MLS)
-dfcp['Dif_UcIntLin'] = np.asarray(dfall.PO3_UcIntLin) - np.asarray(dfall.PO3_MLS)
-
-dfcp['RDif_UcMean'] = 100 * (np.asarray(dfall.PO3_UcMean) - np.asarray(dfall.PO3_MLS)) / np.asarray(dfall.PO3_MLS)
-dfcp['RDif_UcMedian'] = 100 * (np.asarray(dfall.PO3_UcMedian) - np.asarray(dfall.PO3_MLS)) / np.asarray(dfall.PO3_MLS)
-dfcp['RDif_UcIntLin'] = 100 * (np.asarray(dfall.PO3_UcIntLin) - np.asarray(dfall.PO3_MLS)) / np.asarray(dfall.PO3_MLS)
-
-dfcp['Dif_UcMean2'] = np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcMean)
-dfcp['Dif_UcMedian2'] = np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcMedian)
-dfcp['Dif_UcIntLin2'] = np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcIntLin)
-
-dfcp['RDif_UcMean2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcMean)) / np.asarray(dfall.PO3_UcMean)
-dfcp['RDif_UcMedian2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcMedian)) / np.asarray(
-    dfall.PO3_UcMedian)
-dfcp['RDif_UcIntLin2'] = 100 * (np.asarray(dfall.PO3_MLS) - np.asarray(dfall.PO3_UcIntLin)) / np.asarray(
-    dfall.PO3_UcIntLin)
-
-# dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_UccleInterpolated_2004-2019_NiluDQA.csv")
-# dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_RDif_Interpolated_2004-2019_DQA.csv")
 # dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_UccleInterpolated_2004-2019_raw.csv")
-dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_RDif_Interpolated_2004-2019_Raw.csv")
+# dfcp.to_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_RDif_Interpolated_2004-2019_Raw.csv")
 
