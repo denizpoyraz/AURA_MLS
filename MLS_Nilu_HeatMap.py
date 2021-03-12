@@ -5,7 +5,7 @@ import seaborn as sns
 
 ### not all the data series have the same dates, raw + DQA and presto ones
 df1 = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_RDif_Interpolated_2004-2019_Raw.csv")
-df2 = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_RDif_Interpolated_2004-2019_DQA_bkg-pf-eta-pfground.csv")
+df2 = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_RDif_Interpolated_2004-2019_DQA_rs92.csv")
 # df2 = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_RDif_Interpolated_2004-2019_DQA_onlybkg_v2.csv")
 # df2 = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_RDif_Interpolated_2004-2019_DQA_onlyeta.csv")
 # df2 = pd.read_csv("/home/poyraden/Analysis/AURA_MLS/New/MLS_Sodankayl_RDif_Interpolated_2004-2019_DQA_onlytpump.csv")
@@ -105,7 +105,7 @@ ax.set_yticklabels(ytick_labels, rotation = 0)
 
 plt.xlabel(" ")
 # ax.set_ylim([68,8])
-Plotname = 'Sodankayl_BkgandPFandEtaandPFGround_eccminusmls'
+Plotname = 'Sodankayl_DQA_rs92_eccminusmls'
 
 plt.savefig('/home/poyraden/Analysis/AURA_MLS/Plots/Homogenization/UpDated/' + Plotname + '.png')
 plt.savefig('/home/poyraden/Analysis/AURA_MLS/Plots/Homogenization/UpDated/' + Plotname + '.eps')
